@@ -36,7 +36,7 @@ class Profile : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AndroidProject3052662Theme {
+//            AndroidProject3052662Theme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -45,7 +45,7 @@ class Profile : ComponentActivity() {
                     ) {
                     ProfileScreen()
                 }
-            }
+//            }
         }
     }
 }
@@ -68,7 +68,7 @@ fun ProfileScreen() {
 
         // Name below the photo
         Text(
-            text = "John Doe",
+            text = "Vinicius Pepe Bellomo",
             fontWeight = FontWeight.Bold,
             modifier = Modifier.padding(bottom = 16.dp)
         )

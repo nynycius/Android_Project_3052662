@@ -2,4 +2,6 @@
     <string name="app_name">Android Project 3052662</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_passport">Passport</string>
+    <string name="title_activity_menu_drawe">MenuDrawe</string>
+    <string name="title_activity_nav_drawer">NavDrawer</string>
 </resources>
