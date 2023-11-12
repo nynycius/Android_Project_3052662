@@ -31,7 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
+//import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
 
 class Profile : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -4,4 +4,5 @@
     <string name="title_activity_passport">Passport</string>
     <string name="title_activity_menu_drawe">MenuDrawe</string>
     <string name="title_activity_nav_drawer">NavDrawer</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

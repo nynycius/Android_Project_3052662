@@ -11,13 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
-import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
+import com.example.compose.AppTheme
+
+//import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
 
 class Passport : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            AndroidProject3052662Theme {
+            AppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -42,10 +44,3 @@ fun PassportScreen(navController: NavController){
     Greeting3("Android")
 }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview3() {
-    AndroidProject3052662Theme {
-        Greeting3("Android")
-    }
-}
