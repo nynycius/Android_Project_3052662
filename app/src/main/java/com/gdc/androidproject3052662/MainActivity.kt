@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.FavoriteBorder
 import androidx.compose.material3.Button
@@ -61,7 +62,8 @@ import kotlinx.coroutines.launch
 
 
 // create data class for the nav items
-data class NavigationItem( val title: String, val selectIcon: ImageVector, val route: String)
+data class NavigationItem(val title: String, val icon: ImageVector, val route: String)
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
@@ -110,11 +112,15 @@ class MainActivity : ComponentActivity() {
 
                         drawerState = drawerState,
                         drawerContent = {
+                            // loop through items list and populate the navDrawer
                             ModalDrawerSheet {
                                 items.forEachIndexed { index, item ->
                                     NavigationDrawerItem(
+                                        icon = {
+                                            Icon(imageVector = item.icon, contentDescription = item.title)
+                                        },
                                         label = {
-                                                Text(text = item.title)
+                                            Text(text = item.title)
                                         },
                                         // selected used to highlight selected option
                                         selected = index == selectedItemIndex,
@@ -137,54 +143,46 @@ class MainActivity : ComponentActivity() {
                                 TopAppBar(
                                     title = { Text("") },
                                     navigationIcon = {
-                                        IconButton (onClick = {
+                                        IconButton(onClick = {
                                             scope.launch {
                                                 drawerState.open()
+                                            }
+                                        }) {
+                                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
                                         }
-                                    }) {
-                                        Icon(Icons.Filled.Menu , contentDescription = "Menu") }
                                     }
                                 )
                             }
-                        ) {contentPadding ->
+                        ) { contentPadding ->
                             val scrollState = rememberScrollState()
-                            Column (modifier = Modifier.padding(contentPadding),
-                                    verticalArrangement = Arrangement.spacedBy(5.dp),
+                            Column(
+                                modifier = Modifier
+                                    .padding(contentPadding)
+                                    .verticalScroll(scrollState),
+                                verticalArrangement = Arrangement.spacedBy(5.dp),
 //                                    modifier = Modifier.verticalScroll(scrollState)
 
-                            ){
-                                //SetNavhost
-                                NavHost(navController = navController,
-                                    startDestination = "map"){
-                                    composable("map"){
+                            ) {
+                                //SetNavhost declared inside Scaffold to fit the given space
+                                NavHost(
+                                    navController = navController,
+                                    startDestination = "map"
+                                ) {
+                                    composable("map") {
                                         MapScreen(navController)
                                     }
-                                    composable("profile"){
+                                    composable("profile") {
                                         ProfileScreen(navController)
                                     }
-                                    composable("passport"){
+                                    composable("passport") {
                                         PassportScreen(navController)
                                     }
                                 }
 
-                                Button(onClick = { navController.navigate("passport")}) {
-                                    
-                                }
-                                Text(text = "test1")
-                                Text(text = "test2")
-                                Text(text = "test3")
-                                Text(text = "test4")
-                                Text(text = "test5")
-                                Text(text = "test6")
-                                Text(text = "test7")
-                                Text(text = "test8")
-                                Text(text = "test9")
                             }
 
                         }
                     }
-
-
 
 
                 }
@@ -194,8 +192,24 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
+// map api should be here
 fun MapScreen(navController: NavController) {
 
+    Column {
+
+
+        Button(onClick = { navController.navigate("passport") }) { Text(text = "Passport")}
+        
+        Text(text = "test1")
+        Text(text = "test2")
+        Text(text = "test3")
+        Text(text = "test4")
+        Text(text = "test5")
+        Text(text = "test6")
+        Text(text = "test7")
+        Text(text = "test8")
+        Text(text = "test9")
+    }
 }
 
 
