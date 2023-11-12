@@ -3,8 +3,13 @@ package com.gdc.androidproject3052662
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
@@ -21,6 +26,7 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -51,6 +57,21 @@ class Passport : ComponentActivity() {
     }
 }
 
+
+// create dat class to hold tabs infs
+data class TabItem(
+    val title: String,
+    val unselectIcon: ImageVector,
+    val selectIcon: ImageVector
+)
+// inf to populate building cards
+data class BuildingCard(
+    val title: String,
+    val img: ImageVector,
+    val desc: String,
+)
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PassportScreen(navController: NavController) {
 
@@ -76,6 +97,24 @@ fun PassportScreen(navController: NavController) {
     var selectedTabIndex by remember {
         mutableIntStateOf(0)
     }
+
+    // to remeber state of page
+    val pagerState = rememberPagerState {
+        tabItems.size
+    }
+
+    //used to sync tabs and content change
+    LaunchedEffect(selectedTabIndex){
+        pagerState.animateScrollToPage(selectedTabIndex)
+    }
+
+    LaunchedEffect(pagerState.currentPage){
+        if(!pagerState.isScrollInProgress) {
+            selectedTabIndex = pagerState.currentPage
+        }
+    }
+
+
     Column(modifier = Modifier.fillMaxSize()) {
         TabRow(selectedTabIndex = selectedTabIndex) {
 
@@ -86,6 +125,7 @@ fun PassportScreen(navController: NavController) {
                     text = { Text(text = item.title) },
                     icon = {
                         Icon(
+                            // if item is selected, change icon
                             imageVector = if (index == selectedTabIndex) {
                                 item.selectIcon
                             } else item.unselectIcon,
@@ -97,14 +137,16 @@ fun PassportScreen(navController: NavController) {
             }
 
         }
+        // create pager and keep track of its state
+        HorizontalPager(state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { index ->
+            Box(modifier = Modifier.fillMaxSize()){
+                Text(text = tabItems[index].title)
+            }
 
+        }
     }
+
 }
 
-
-// create dat class to hold tabs infs
-data class TabItem(
-    val title: String,
-    val unselectIcon: ImageVector,
-    val selectIcon: ImageVector
-)
