@@ -25,6 +25,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.sharp.FavoriteBorder
+import androidx.compose.material3.AlertDialogDefaults.containerColor
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DrawerState
@@ -43,6 +44,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -54,6 +57,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,6 +90,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AppTheme {
+
                 // list for drawer nav items
                 val items = listOf(
                     NavigationItem(
@@ -139,7 +144,9 @@ class MainActivity : ComponentActivity() {
                                         },
                                         label = {
                                             Text(text = item.title)
+
                                         },
+
                                         // selected used to highlight selected option
                                         selected = index == selectedItemIndex,
                                         onClick = {
@@ -159,7 +166,7 @@ class MainActivity : ComponentActivity() {
                         Scaffold(
                             topBar = {
                                 TopAppBar(
-                                    title = { Text("") },
+                                    title = {  },
                                     navigationIcon = {
                                         IconButton(onClick = {
                                             scope.launch {
@@ -212,9 +219,8 @@ class MainActivity : ComponentActivity() {
 
 
 @Composable
-// map api should be here
+// Map API, initially only with generic location
 fun MapScreen(navController: NavController) {
-
 
 //    var uiSettings by remember { mutableStateOf(MapUiSettings()) }
 //    val properties by remember {
@@ -228,7 +234,9 @@ fun MapScreen(navController: NavController) {
 
     // initialize google maps
     GoogleMap(
-        modifier = Modifier.fillMaxSize().height(727.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .height(727.dp),
         cameraPositionState = cameraPositionState
     ) {
         // set mark to dublin TODO: current location and pointer
