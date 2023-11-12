@@ -154,6 +154,18 @@ class MainActivity : ComponentActivity() {
 
                             ){
                                 //SetNavhost
+                                NavHost(navController = navController,
+                                    startDestination = "map"){
+                                    composable("map"){
+                                        MapScreen(navController)
+                                    }
+                                    composable("profile"){
+                                        ProfileScreen(navController)
+                                    }
+                                    composable("passport"){
+                                        PassportScreen(navController)
+                                    }
+                                }
 
                                 Button(onClick = { navController.navigate("passport")}) {
                                     
@@ -180,6 +192,13 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+@Composable
+fun MapScreen(navController: NavController) {
+
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
