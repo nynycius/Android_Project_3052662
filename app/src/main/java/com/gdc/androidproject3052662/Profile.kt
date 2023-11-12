@@ -99,7 +99,7 @@ fun ProfilePhoto(modifier: Modifier = Modifier) {
         contentScale = ContentScale.Crop
     )
 }
-
+// fun used to group information item
 @Composable
 fun InformationColumn() {
     Column(
@@ -113,6 +113,7 @@ fun InformationColumn() {
     }
 }
 
+// parameters inf data
 @Composable
 fun InformationItem(title: String, value: String) {
     Row(

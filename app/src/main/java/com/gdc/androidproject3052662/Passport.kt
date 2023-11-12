@@ -4,12 +4,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.DateRange
@@ -19,6 +25,8 @@ import androidx.compose.material.icons.sharp.DateRange
 import androidx.compose.material.icons.sharp.FavoriteBorder
 import androidx.compose.material.icons.sharp.LocationOn
 import androidx.compose.material.icons.sharp.Place
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -33,8 +41,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 
@@ -141,12 +153,107 @@ fun PassportScreen(navController: NavController) {
         HorizontalPager(state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { index ->
+            // dummy cards, logic will be implemented with database
             Box(modifier = Modifier.fillMaxSize()){
-                Text(text = tabItems[index].title)
+                if (index == 0){
+                    Buildings()
+                } else if (index == 1){
+                    Discovered()
+                }else Favorite()
+
             }
 
         }
     }
 
+}
+
+// Card will be populated here with database infs
+@Composable
+fun Buildings(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        cardBuild(title = "Griffith College", descrp = "A great college to study in")
+        cardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
+        cardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
+    }
+
+}
+@Composable
+fun Discovered(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        cardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
+        cardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
+    }
+
+}
+@Composable
+fun Favorite(){
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        cardBuild(title = "Griffith College", descrp = "A great college to study in")
+
+    }
+
+}
+
+// will be used as template to be populate by infs in the database
+@Composable
+fun cardBuild(title: String, descrp: String ){
+
+    Card(
+        //shape = MaterialTheme.shapes.medium,
+        shape = RoundedCornerShape(8.dp),
+        // modifier = modifier.size(280.dp, 240.dp)
+        modifier = Modifier.padding(10.dp,5.dp,10.dp,10.dp),
+        //set card elevation of the card
+        elevation = CardDefaults.cardElevation(
+            defaultElevation =  10.dp,
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor =  MaterialTheme.colorScheme.primaryContainer,
+        ),
+    ) {
+        Column(modifier = Modifier.clickable(onClick = {  })) {
+
+            // default current img
+            Image(
+                painter = painterResource(R.drawable.ic_launcher_foreground),
+                contentDescription = null, // decorative
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .height(150.dp)
+                    .fillMaxWidth()
+            )
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Text(
+                    text = descrp,
+                    //maxLines = 1,
+                    //overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            }
+        }
+    }
 }
 
