@@ -30,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
 
 class Profile : ComponentActivity() {
@@ -43,7 +44,7 @@ class Profile : ComponentActivity() {
                     color = Color.Black
                     //MaterialTheme.colorScheme.background
                     ) {
-                    ProfileScreen()
+//                    ProfileScreen()
                 }
 //            }
         }
@@ -51,7 +52,7 @@ class Profile : ComponentActivity() {
 }
 
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -136,10 +137,15 @@ fun InformationItem(title: String, value: String) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ProfileScreenPreview() {
-    AndroidProject3052662Theme {
-        ProfileScreen()
-    }
-}
+//@Composable
+//fun ProfileScreen(navController: NavController){
+//
+//}
+
+//@Preview(showBackground = true)
+//@Composable
+//fun ProfileScreenPreview() {
+//    AndroidProject3052662Theme {
+//        ProfileScreen(navController: NavController)
+//    }
+//}

@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
 
 class Passport : ComponentActivity() {
@@ -35,6 +36,10 @@ fun Greeting3(name: String, modifier: Modifier = Modifier) {
         text = "Hello $name!",
         modifier = modifier
     )
+}
+@Composable
+fun PassportScreen(navController: NavController){
+    Greeting3("Android")
 }
 
 @Preview(showBackground = true)
