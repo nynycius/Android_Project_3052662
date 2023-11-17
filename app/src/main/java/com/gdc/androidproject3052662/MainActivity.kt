@@ -1,10 +1,15 @@
 package com.gdc.androidproject3052662
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -56,17 +61,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
@@ -227,26 +237,124 @@ fun MapScreen(navController: NavController) {
 //        mutableStateOf(MapProperties(mapType = MapType.SATELLITE))
 
     // as a preliminary test only points to dublin
-    val dublin = LatLng(53.350140, -6.266155)
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(dublin, 12f)
-    }
 
-    // initialize google maps
-    GoogleMap(
+
+
+    val context = LocalContext.current
+    // store lat and long
+    var location by remember { mutableStateOf(LatLng(53.350140, -6.266155)) }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(location, 12f)}
+
+    // Create a permission launcher
+    val requestPermissionLauncher =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.RequestPermission(),
+            onResult = { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission granted, update the location
+                    getCurrentLocation(context) { lat, long ->
+                        location = LatLng(lat, long)
+                    }
+                }
+            })
+
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .height(727.dp),
-        cameraPositionState = cameraPositionState
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // set mark to dublin TODO: current location and pointer
-        Marker(
-            state = MarkerState(position = dublin),
-            title = "Dublin",
-            snippet = "Marker in Dublin"
-        )
+        Button(
+            onClick = {
+                if (hasLocationPermission(context)) {
+                    // Permission already granted, update the location
+                    getCurrentLocation(context) { lat, long ->
+                        location = LatLng(lat, long)
+                    }
+                } else {
+                    // Request location permission
+                    requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                }
+            }
+        ) {
+            Text(text = "Allow")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        //Text(text = location)
+
+        GoogleMap(
+            modifier = Modifier
+                .fillMaxSize()
+                .height(727.dp),
+            cameraPositionState = cameraPositionState
+        ) {
+            // set mark to dublin TODO: current location and pointer
+            Marker(
+                state = MarkerState(position =
+
+                location
+
+                ),
+                title = "Dublin",
+                snippet = "Marker in Dublin"
+            )
+        }
     }
 
+
+
+
+}
+
+
+
+// confirm if the permission is granted
+private fun hasLocationPermission(context: Context): Boolean {
+    return ContextCompat.checkSelfPermission(
+        context,
+        android.Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+}
+
+
+
+// function to find current location, return coordinates
+private fun getCurrentLocation(context: Context, callback: (Double, Double) -> Unit) {
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+
+    // confirm permission before release location
+    if (ActivityCompat.checkSelfPermission(
+            context,
+            android.Manifest.permission.ACCESS_FINE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        // TODO: Consider calling
+        //    ActivityCompat#requestPermissions
+        // here to request the missing permissions, and then overriding
+        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+        //                                          int[] grantResults)
+        // to handle the case where the user grants the permission. See the documentation
+        // for ActivityCompat#requestPermissions for more details.
+        return
+    }
+    fusedLocationClient.lastLocation
+        .addOnSuccessListener { location ->
+            if (location != null) {
+                val lat = location.latitude
+                val long = location.longitude
+                callback(lat, long)
+            }
+        }
+        .addOnFailureListener { exception ->
+            // Handle location retrieval failure
+            exception.printStackTrace()
+        }
 
 }
 
@@ -254,7 +362,5 @@ fun MapScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    AppTheme {
 
-    }
 }

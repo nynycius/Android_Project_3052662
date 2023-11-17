@@ -128,9 +128,10 @@ fun PassportScreen(navController: NavController) {
 
 
     Column(modifier = Modifier.fillMaxSize()) {
+        // tabs for the cards
         TabRow(selectedTabIndex = selectedTabIndex) {
 
-            // loop through tab itens
+            // loop through tab item
             tabItems.forEachIndexed { index, item ->
                 Tab(selected = index == selectedTabIndex,
                     onClick = { selectedTabIndex = index },
