@@ -155,11 +155,12 @@ fun PassportScreen(navController: NavController) {
         ) { index ->
             // dummy cards, logic will be implemented with database
             Box(modifier = Modifier.fillMaxSize()){
-                if (index == 0){
-                    Buildings()
-                } else if (index == 1){
-                    Discovered()
-                }else Favorite()
+                // use when case to be more reliable
+                when (index){
+                  0 ->  Buildings()
+                  1 ->  Discovered()
+                  2 ->  Favorite()
+                }
 
             }
 
