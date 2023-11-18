@@ -250,7 +250,7 @@ fun cardBuild(title: String, descrp: String ){
 
                 Text(
                     text = descrp,
-                    //maxLines = 1,
+                    maxLines = 3,
                     //overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.titleSmall,
                 )

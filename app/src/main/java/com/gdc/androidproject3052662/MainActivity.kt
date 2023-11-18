@@ -190,10 +190,11 @@ class MainActivity : ComponentActivity() {
                             }
                         ) { contentPadding ->
                             val scrollState = rememberScrollState()
-                            Column(
-                                modifier = Modifier
-                                    .padding(contentPadding)
-                                    .verticalScroll(scrollState),
+                            Box(
+                                modifier = Modifier.fillMaxSize()
+                                    .padding(contentPadding),
+//                                    .verticalScroll(scrollState),
+
 //                                verticalArrangement = Arrangement.spacedBy(5.dp),
 //                                    modifier = Modifier.verticalScroll(scrollState)
 
@@ -261,8 +262,8 @@ fun MapScreen(navController: NavController) {
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
+            .fillMaxSize().fillMaxHeight(),
+            //.padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -286,8 +287,8 @@ fun MapScreen(navController: NavController) {
 
         GoogleMap(
             modifier = Modifier
-                .fillMaxSize()
-                .height(727.dp),
+                .fillMaxSize(),
+//                .height(727.dp),
             cameraPositionState = cameraPositionState
         ) {
             // set mark to dublin TODO: current location and pointer
