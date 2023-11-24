@@ -192,11 +192,7 @@ class MainActivity : ComponentActivity() {
                             val scrollState = rememberScrollState()
                             Box(
                                 modifier = Modifier.fillMaxSize()
-                                    .padding(contentPadding),
-//                                    .verticalScroll(scrollState),
-
-//                                verticalArrangement = Arrangement.spacedBy(5.dp),
-//                                    modifier = Modifier.verticalScroll(scrollState)
+                                    .padding(contentPadding)
 
                             ) {
                                 //SetNavhost declared inside Scaffold to fit the given space
@@ -288,7 +284,6 @@ fun MapScreen(navController: NavController) {
         GoogleMap(
             modifier = Modifier
                 .fillMaxSize(),
-//                .height(727.dp),
             cameraPositionState = cameraPositionState
         ) {
             // set mark to dublin TODO: current location and pointer

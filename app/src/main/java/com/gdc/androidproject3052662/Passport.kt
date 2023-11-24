@@ -15,15 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.sharp.DateRange
 import androidx.compose.material.icons.sharp.FavoriteBorder
-import androidx.compose.material.icons.sharp.LocationOn
 import androidx.compose.material.icons.sharp.Place
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -42,10 +42,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
@@ -152,10 +150,13 @@ fun PassportScreen(navController: NavController) {
         }
         // create pager and keep track of its state
         HorizontalPager(state = pagerState,
-            modifier = Modifier.fillMaxWidth()
-        ) { index ->
+            modifier = Modifier.fillMaxWidth(),
+            ) { index ->
+            val scrollState = rememberScrollState()
             // dummy cards, logic will be implemented with database
-            Box(modifier = Modifier.fillMaxSize()){
+            Box(modifier = Modifier.fillMaxSize()
+                                    .verticalScroll(scrollState),
+            ){
                 // use when case to be more reliable
                 when (index){
                   0 ->  Buildings()
@@ -178,9 +179,9 @@ fun Buildings(){
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        cardBuild(title = "Griffith College", descrp = "A great college to study in")
-        cardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
-        cardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
+        CardBuild(title = "Griffith College", descrp = "A great college to study in")
+        CardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
+        CardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
     }
 
 }
@@ -191,8 +192,8 @@ fun Discovered(){
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        cardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
-        cardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
+        CardBuild(title = "Saint Patrick ", descrp ="Saint Patrick’s has been at the heart of Dublin and Ireland’s history for over 800 years. The Cathedral is a Place Where All are Welcome to Experience the Loving Presence of God. Ireland's Largest Church. Over 800 Years Of History.")
+        CardBuild(title = "Christ Church", descrp = "Christ Church Cathedral, more formally The Cathedral of the Holy Trinity, is the cathedral of the United Dioceses of Dublin and Glendalough and the cathedral of the ecclesiastical province of the United Provinces of Dublin and Cashel in the Church of Ireland." )
     }
 
 }
@@ -203,7 +204,7 @@ fun Favorite(){
             .fillMaxWidth()
             .padding(16.dp)
     ) {
-        cardBuild(title = "Griffith College", descrp = "A great college to study in")
+        CardBuild(title = "Griffith College", descrp = "A great college to study in")
 
     }
 
@@ -211,7 +212,7 @@ fun Favorite(){
 
 // will be used as template to be populate by infs in the database
 @Composable
-fun cardBuild(title: String, descrp: String ){
+fun CardBuild(title: String, descrp: String ){
 
     Card(
         //shape = MaterialTheme.shapes.medium,
