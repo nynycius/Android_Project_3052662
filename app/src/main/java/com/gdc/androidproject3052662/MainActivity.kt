@@ -90,10 +90,6 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
 
-// create data class for the nav items
-data class NavigationItem(val title: String, val icon: ImageVector, val route: String)
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,122 +97,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             AppTheme {
 
-                // list for drawer nav items
-                val items = listOf(
-                    NavigationItem(
-                        "Map",
-                        Icons.Filled.LocationOn,
-                        "map"
-                    ),
-                    NavigationItem(
-                        "Profile",
-                        Icons.Filled.AccountCircle,
-                        "profile"
-                    ),
-                    NavigationItem(
-                        "Passport",
-                        Icons.Filled.FavoriteBorder,
-                        "passport"
-                    )
-
-                )
-
-
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-                    val scope = rememberCoroutineScope()
-                    var selectedItemIndex by rememberSaveable {
-                        mutableIntStateOf(0)
-                    }
-                    // navigation controller
-                    val navController = rememberNavController()
+                    // Initial call to start application, NavDrawer encapsulate the main layout and transition
+                    NavDrawer()
 
-
-
-                    ModalNavigationDrawer(
-
-                        drawerState = drawerState,
-                        drawerContent = {
-                            // loop through items list and populate the navDrawer
-                            ModalDrawerSheet {
-                                items.forEachIndexed { index, item ->
-                                    NavigationDrawerItem(
-                                        icon = {
-                                            Icon(
-                                                imageVector = item.icon,
-                                                contentDescription = item.title
-                                            )
-                                        },
-                                        label = {
-                                            Text(text = item.title)
-
-                                        },
-
-                                        // selected used to highlight selected option
-                                        selected = index == selectedItemIndex,
-                                        onClick = {
-                                            navController.navigate(item.route)
-                                            selectedItemIndex = index
-                                            scope.launch {
-                                                drawerState.close()
-                                            }
-                                        })
-                                }
-                            }
-                        },
-                        gesturesEnabled = false,
-                        //modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
-                    ) {
-                        // Scaffold used to wrap content bellow topBar
-                        Scaffold(
-                            topBar = {
-                                TopAppBar(
-                                    title = {  },
-                                    navigationIcon = {
-                                        IconButton(onClick = {
-                                            scope.launch {
-                                                drawerState.open()
-                                            }
-                                        }) {
-                                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
-                                        }
-                                    }
-                                )
-                            }
-                        ) { contentPadding ->
-                            val scrollState = rememberScrollState()
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(contentPadding)
-
-                            ) {
-                                //SetNavhost declared inside Scaffold to fit the given space
-                                NavHost(
-                                    navController = navController,
-                                    startDestination = "map"
-                                ) {
-                                    composable("map") {
-                                        MapScreen(navController)
-                                    }
-                                    composable("profile") {
-                                        ProfileScreen(navController)
-                                    }
-                                    composable("passport") {
-                                        PassportScreen(navController)
-                                    }
-                                }
-
-                                }
-
-                            }
-
-                        }
                     }
 
 
@@ -224,6 +113,128 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
+
+// create data class for the nav items
+data class NavigationItem(val title: String, val icon: ImageVector, val route: String)
+
+// list for drawer nav items
+val items = listOf(
+    NavigationItem(
+        "Map",
+        Icons.Filled.LocationOn,
+        "map"
+    ),
+    NavigationItem(
+        "Profile",
+        Icons.Filled.AccountCircle,
+        "profile"
+    ),
+    NavigationItem(
+        "Passport",
+        Icons.Filled.FavoriteBorder,
+        "passport"
+    )
+
+)
+
+@Composable
+@OptIn(ExperimentalMaterial3Api::class)
+fun NavDrawer(){
+
+    //Navabar values
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+    var selectedItemIndex by rememberSaveable {
+        mutableIntStateOf(0)
+    }
+    // navigation controller
+    val navController = rememberNavController()
+
+
+
+    ModalNavigationDrawer(
+
+        drawerState = drawerState,
+        drawerContent = {
+            // loop through items list and populate the navDrawer
+            ModalDrawerSheet {
+                items.forEachIndexed { index, item ->
+                    NavigationDrawerItem(
+                        icon = {
+                            Icon(
+                                imageVector = item.icon,
+                                contentDescription = item.title
+                            )
+                        },
+                        label = {
+                            Text(text = item.title)
+
+                        },
+
+                        // selected used to highlight selected option
+                        selected = index == selectedItemIndex,
+                        onClick = {
+                            navController.navigate(item.route)
+                            selectedItemIndex = index
+                            scope.launch {
+                                drawerState.close()
+                            }
+                        })
+                }
+            }
+        },
+        gesturesEnabled = false,
+        //modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding)
+    ) {
+        // Scaffold used to wrap content bellow topBar
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    title = {  },
+                    navigationIcon = {
+                        IconButton(onClick = {
+                            scope.launch {
+                                drawerState.open()
+                            }
+                        }) {
+                            Icon(Icons.Filled.Menu, contentDescription = "Menu")
+                        }
+                    }
+                )
+            }
+        ) { contentPadding ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(contentPadding)
+
+            ) {
+                //SetNavhost declared inside Scaffold to fit the given space
+                NavHost(
+                    navController = navController,
+                    startDestination = "map"
+                ) {
+                    composable("map") {
+                        MapScreen(navController)
+                    }
+                    composable("profile") {
+                        ProfileScreen(navController)
+                    }
+                    composable("passport") {
+                        PassportScreen(navController)
+                    }
+                }
+
+            }
+
+        }
+
+    }
+}
+
+
 
 
 @Preview(showBackground = true)
