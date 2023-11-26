@@ -191,7 +191,8 @@ class MainActivity : ComponentActivity() {
                         ) { contentPadding ->
                             val scrollState = rememberScrollState()
                             Box(
-                                modifier = Modifier.fillMaxSize()
+                                modifier = Modifier
+                                    .fillMaxSize()
                                     .padding(contentPadding)
 
                             ) {
@@ -223,136 +224,6 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-
-
-@Composable
-// Map API, initially only with generic location
-fun MapScreen(navController: NavController) {
-
-//    var uiSettings by remember { mutableStateOf(MapUiSettings()) }
-//    val properties by remember {
-//        mutableStateOf(MapProperties(mapType = MapType.SATELLITE))
-
-    // as a preliminary test only points to dublin
-
-
-
-    val context = LocalContext.current
-    // store lat and long
-    var location by remember { mutableStateOf(LatLng(53.350140, -6.266155)) }
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(location, 12f)}
-
-    // Create a permission launcher
-    val requestPermissionLauncher =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.RequestPermission(),
-            onResult = { isGranted: Boolean ->
-                if (isGranted) {
-                    // Permission granted, update the location
-                    getCurrentLocation(context) { lat, long ->
-                        location = LatLng(lat, long)
-                    }
-                }
-            })
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize().fillMaxHeight(),
-            //.padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Button(
-            onClick = {
-                if (hasLocationPermission(context)) {
-                    // Permission already granted, update the location
-                    getCurrentLocation(context) { lat, long ->
-                        location = LatLng(lat, long)
-                    }
-                } else {
-                    // Request location permission
-                    requestPermissionLauncher.launch(android.Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-            }
-        ) {
-            Text(text = "Allow")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
-        //Text(text = location)
-
-        GoogleMap(
-            modifier = Modifier
-                .fillMaxSize(),
-            cameraPositionState = cameraPositionState
-        ) {
-            // set mark to dublin TODO: current location and pointer
-            Marker(
-                state = MarkerState(position =
-
-                location
-
-                ),
-                title = "Dublin",
-                snippet = "Marker in Dublin"
-            )
-        }
-    }
-
-
-
-
-}
-
-
-
-// confirm if the permission is granted
-private fun hasLocationPermission(context: Context): Boolean {
-    return ContextCompat.checkSelfPermission(
-        context,
-        android.Manifest.permission.ACCESS_FINE_LOCATION
-    ) == PackageManager.PERMISSION_GRANTED
-}
-
-
-
-// function to find current location, return coordinates
-private fun getCurrentLocation(context: Context, callback: (Double, Double) -> Unit) {
-    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
-
-
-    // confirm permission before release location
-    if (ActivityCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        // TODO: Consider calling
-        //    ActivityCompat#requestPermissions
-        // here to request the missing permissions, and then overriding
-        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-        //                                          int[] grantResults)
-        // to handle the case where the user grants the permission. See the documentation
-        // for ActivityCompat#requestPermissions for more details.
-        return
-    }
-    fusedLocationClient.lastLocation
-        .addOnSuccessListener { location ->
-            if (location != null) {
-                val lat = location.latitude
-                val long = location.longitude
-                callback(lat, long)
-            }
-        }
-        .addOnFailureListener { exception ->
-            // Handle location retrieval failure
-            exception.printStackTrace()
-        }
-
-}
 
 
 @Preview(showBackground = true)
