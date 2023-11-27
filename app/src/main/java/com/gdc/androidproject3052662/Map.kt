@@ -4,8 +4,10 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
@@ -27,7 +29,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
@@ -43,9 +47,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.compose.AppTheme
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -100,31 +107,26 @@ fun MapScreen(navController: NavController) {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(location, 12f)}
 
+    // use to debug distance
+    var testMarker = LatLng(53.33439041891711, -6.273324243524751)
+    
 
     // Create a permission launcher
-    val requestPermissionLauncher =
-        rememberLauncherForActivityResult(
-            // request permission
-            contract = ActivityResultContracts.RequestPermission(),
-            onResult = { isGranted: Boolean ->
-                if (isGranted) {
-                    isGranted
+    val requestPermissionLauncher =  rememberPermissionState( permission = Manifest.permission.ACCESS_FINE_LOCATION)
 
-                }
-            }
-        )
+    var openAlertDialog by remember { mutableStateOf(false) }
 
     // initial permission request, open dialog
-    if(!hasLocationPermission(context)){
-        val openAlertDialog = remember { mutableStateOf(true) }
+    if(!requestPermissionLauncher.status.isGranted){
+
         PermissionDialog(
-            onDismissRequest = { openAlertDialog.value = false },
-            onConfirmation = { requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)},
+            onConfirmation = { requestPermissionLauncher.launchPermissionRequest()},
             dialogTitle = "Permission is necessary" ,
-            dialogText = "This app demands current location" ,
+            dialogText = "This application uses your current location to work, you must enable it use this app" ,
             icon = Icons.Filled.LocationOn
         )
     }
+
 
 
     Column(
@@ -141,6 +143,9 @@ fun MapScreen(navController: NavController) {
 
 
         Text(text = getLocation(context).toString())
+
+        // print distance
+        Text(text = "Distance between points " + DistanceTo(latLng = testMarker).toString())
 
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -167,25 +172,46 @@ fun MapScreen(navController: NavController) {
     }
 }
 
-
-// TODO: NOT BEING USED, CHECK USABILITY OR DELETE
-// function to handle all permission request, given permission must be passed to be updated
-@OptIn(ExperimentalPermissionsApi::class)
+// determine distance between marker and user to verify if it gets there
+@RequiresPermission (Manifest.permission.ACCESS_FINE_LOCATION)
 @Composable
-fun RequestPermissionLauncher(){
-    // Create a permission launcher
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        // request permission
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
+fun DistanceTo(latLng: LatLng) : Float {
+
+    val context = LocalContext.current
+
+    // convert current location to Location Object
+    var currentLocation : Location = Location ("user")
+
+    // store in mutable of to being able to update values
+    var currentLat by remember { mutableStateOf( 0.00 )    }
+    currentLat =  getLocation(context = context).latitude
+
+    var currentLng by remember { mutableStateOf( 0.00 )    }
+    currentLng =  getLocation(context = context).longitude
+
+    currentLocation.latitude = currentLat
+    currentLocation.longitude = currentLng
+    
 
 
+    // maker Location object
+    var marker : Location = Location ("Marker")
+    marker.latitude = latLng.latitude
+    marker.longitude = latLng.longitude
 
-    }.also {
+    // calculate distance
+    var distance by remember { mutableFloatStateOf( currentLocation.distanceTo(marker)) }
 
-        it.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-    }
+    distance = currentLocation.distanceTo(marker)
+
+    // To debug currentLocation Object
+    //Text(text = currentLocation.toString())
+    
+    return distance
+    
+
 }
+
 
 // confirm if the permission is granted
 //private
