@@ -70,7 +70,7 @@ fun PermissionDialog(
     )
 }
 
-//Dialog for CardBuilds
+//Dialog for CardBuilds TODO: to be implemented
 @Composable
 fun CardDialog(onDismiss: () -> Unit) {
     val screenHeight = with(LocalDensity.current) {
@@ -88,9 +88,6 @@ fun CardDialog(onDismiss: () -> Unit) {
                 .padding(16.dp)
         ) {
             Column{
-                Text("RULES",textAlign = TextAlign.Center, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("Tilt the phone side to side to avoid the obstacles in the way.\nTry to make it to the end of the finish line without losing\nMay the odds be in your favor!", modifier = Modifier.padding(8.dp), fontSize = 16.sp)
-
 
                 // Close button
                 Button(onClick = { onDismiss() }) {
