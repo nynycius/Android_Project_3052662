@@ -6,4 +6,6 @@
     <string name="title_activity_nav_drawer">NavDrawer</string>
     <string name="title_activity_maps">MapsActivity</string>
     <string name="title_activity_map">Map</string>
+    <string name="title_activity_test_location">TestLocation</string>
+    <string name="title_activity_dialogs">Dialogs</string>
 </resources>
