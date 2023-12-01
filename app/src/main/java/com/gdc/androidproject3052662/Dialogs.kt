@@ -72,7 +72,10 @@ fun PermissionDialog(
 
 //Dialog for CardBuilds TODO: to be implemented
 @Composable
-fun CardDialog(onDismiss: () -> Unit) {
+fun CardDialog(onDismiss: () -> Unit,
+               dialogTitle: String,
+               dialogText: String,
+               img: ImageVector) {
     val screenHeight = with(LocalDensity.current) {
         (LocalConfiguration.current.screenHeightDp * density).toInt()
     }

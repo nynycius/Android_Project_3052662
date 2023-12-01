@@ -20,11 +20,7 @@
             android:exported="false"
             android:label="@string/title_activity_dialogs"
             android:theme="@style/Theme.AndroidProject3052662" />
-        <activity
-            android:name=".TestLocation"
-            android:exported="false"
-            android:label="@string/title_activity_test_location"
-            android:theme="@style/Theme.AndroidProject3052662" />
+
         <activity
             android:name=".Map"
             android:exported="false"

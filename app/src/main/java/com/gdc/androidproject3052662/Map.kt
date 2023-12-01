@@ -180,7 +180,7 @@ fun DistanceTo(latLng: LatLng) : Float {
     val context = LocalContext.current
 
     // convert current location to Location Object
-    var currentLocation : Location = Location ("user")
+    val currentLocation : Location = Location ("user")
 
     // store in mutable of to being able to update values
     var currentLat by remember { mutableStateOf( 0.00 )    }
@@ -239,7 +239,7 @@ fun getLocation(context : Context) : LatLng {
 
     // Only register the location updates effect when we have a request
     if (locationRequest != null) {
-        LocationUpdatesEffect(locationRequest!!) { result ->
+        LocationUpdates(locationRequest!!) { result ->
             // For each result update the text
             for (currentLocation in result.locations) {
                 locationUpdates = LatLng(currentLocation.latitude, currentLocation.longitude)

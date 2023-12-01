@@ -97,11 +97,6 @@ val items = listOf(
         Icons.Filled.FavoriteBorder,
         "passport"
     ) ,
-    NavigationItem(
-        "Test",
-        Icons.Filled.FavoriteBorder,
-        "test"
-)
 
 )
 
@@ -191,9 +186,7 @@ fun NavDrawer(){
                     composable("passport") {
                         PassportScreen(navController)
                     }
-                    composable("test") {
-                        TestScreen(navController)
-                    }
+
                 }
 
             }

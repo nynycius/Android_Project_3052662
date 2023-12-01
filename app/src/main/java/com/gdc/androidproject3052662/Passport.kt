@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerDefaults
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -112,13 +113,17 @@ fun PassportScreen(navController: NavController) {
     val pagerState = rememberPagerState {
         tabItems.size
     }
+    // to match fling with tab
+    val fling = PagerDefaults.flingBehavior(
+        state = pagerState,
+    )
 
     //used to sync tabs and content change
     LaunchedEffect(selectedTabIndex){
         pagerState.animateScrollToPage(selectedTabIndex)
     }
-
-    LaunchedEffect(pagerState.currentPage){
+    //if it is not changed by scroll, updated index from tab
+    LaunchedEffect(pagerState.currentPage, pagerState.isScrollInProgress){
         if(!pagerState.isScrollInProgress) {
             selectedTabIndex = pagerState.currentPage
         }
