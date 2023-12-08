@@ -8,6 +8,8 @@ plugins {
     id ("com.android.library") version "8.0.2" apply false
     id ("com.google.dagger.hilt.android") version "2.44" apply false
 
+    // plugins for Mangodb Realm
+    id ("io.realm.kotlin") version "1.11.0" apply false
 
 
 }

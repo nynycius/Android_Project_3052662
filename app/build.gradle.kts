@@ -6,6 +6,10 @@ plugins {
     // maps plug in
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
+
+    // Mangodb Realm plug ins
+    id("io.realm.kotlin")
+
 }
 
 android {
@@ -57,7 +61,14 @@ android {
 
 dependencies {
 
-    // add nav dependency from Jetpack M3
+    // Mangodb Realm implementation
+    implementation ("io.realm.kotlin:library-base:1.11.0")
+    implementation ("io.realm.kotlin:library-sync:1.11.0")// If using Device Sync
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
+
+
+
+// add nav dependency from Jetpack M3
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
 
@@ -113,3 +124,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
+
+// Mangodb Realm plug
