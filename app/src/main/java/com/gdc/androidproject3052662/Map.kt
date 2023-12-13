@@ -95,7 +95,7 @@ fun MapScreen(navController: NavController) {
     val context = LocalContext.current
 
 
-    var uiSettings by remember { mutableStateOf(MapUiSettings()) }
+    val uiSettings by remember { mutableStateOf(MapUiSettings()) }
 
     val properties by remember {
         mutableStateOf(MapProperties(isMyLocationEnabled = hasLocationPermission(context)))
@@ -108,8 +108,9 @@ fun MapScreen(navController: NavController) {
         position = CameraPosition.fromLatLngZoom(location, 12f)}
 
     // use to debug distance
-    var testMarker = LatLng(53.33439041891711, -6.273324243524751)
-    
+//    val testMarker = LatLng(53.33439041891711, -6.273324243524751)
+      val testMarker = LatLng(53.33079569100914, -6.277543034888738)
+
 
     // Create a permission launcher
     val requestPermissionLauncher =  rememberPermissionState( permission = Manifest.permission.ACCESS_FINE_LOCATION)
@@ -127,6 +128,17 @@ fun MapScreen(navController: NavController) {
         )
     }
 
+    var close by remember { mutableStateOf(false) }
+
+    // if distance smaller than 2 meters pop up Dialog
+    if(DistanceTo(latLng = testMarker) < 5 ){
+
+        PermissionDialog( onConfirmation = {  requestPermissionLauncher.launchPermissionRequest() },
+            dialogTitle = " Test " ,
+            dialogText = "Test " ,
+            icon = Icons.Filled.LocationOn)
+
+    }
 
 
     Column(
@@ -168,11 +180,22 @@ fun MapScreen(navController: NavController) {
                 title = "Dublin",
                 snippet = "Marker in Dublin"
             )
+            Marker(
+                state = MarkerState(position =
+
+                testMarker
+
+                ),
+                title = "Test",
+                snippet = "Marker test"
+            )
         }
+
+
     }
 }
 
-// determine distance between marker and user to verify if it gets there
+// determine distance in meters between marker and user to verify if it gets there
 @RequiresPermission (Manifest.permission.ACCESS_FINE_LOCATION)
 @Composable
 fun DistanceTo(latLng: LatLng) : Float {
@@ -195,7 +218,7 @@ fun DistanceTo(latLng: LatLng) : Float {
 
 
     // maker Location object
-    var marker : Location = Location ("Marker")
+    val marker : Location = Location ("Marker")
     marker.latitude = latLng.latitude
     marker.longitude = latLng.longitude
 

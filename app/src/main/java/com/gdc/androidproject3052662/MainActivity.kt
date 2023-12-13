@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.Button
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -37,6 +40,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
+import com.gdc.androidproject3052662.Constants.APP_ID
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -47,8 +51,11 @@ import com.google.maps.android.compose.MapUiSettings
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
+import io.realm.kotlin.mongodb.App
+import io.realm.kotlin.mongodb.Credentials
 //import com.gdc.androidproject3052662.ui.theme.AndroidProject3052662Theme
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,8 +71,10 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
 
-                    // Initial call to start application, NavDrawer encapsulate the main layout and transition
-                    NavDrawer()
+                    if( getAuth()) {
+                        // Initial call to start application, NavDrawer encapsulate the main layout and transition
+                        NavDrawer()
+                    }
 
                     }
 
@@ -74,6 +83,35 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
+@Composable
+private fun getAuth(): Boolean {
+
+
+    var check by remember { mutableStateOf( false) }
+    Button(
+        onClick = {
+            // Try to login as anonymous
+            val app: App = App.create(APP_ID) // Replace this with your App ID
+            runBlocking {
+                val anonymousCredentials = Credentials.anonymous()
+                val user = app.login(anonymousCredentials)
+            }
+
+            MongoDB.configureTheRealm()
+
+            check = true
+        }
+    ){
+        Text(text = "continue")
+    }
+    return check
+}
+
+
+
+
 
 
 
