@@ -11,7 +11,7 @@ interface BuildDao {
 
     // upsert used to insert or update in case of conflict, suspend fun runs in coroutine
     @Upsert
-    fun upsertBuild(entity: Builds)
+    suspend fun upsertBuild(entity: Builds)
 
     // return all Entries
     @Query("SELECT * FROM Build")
