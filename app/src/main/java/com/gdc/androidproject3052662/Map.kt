@@ -127,6 +127,19 @@ fun MapScreen(navController: NavController) {
         )
     }
 
+    // debug, to be used to programmatically check current location with Builds location
+    // if distance smaller than 5 meters open dialog and inform user
+    if(DistanceTo(latLng = testMarker) > 5){
+
+        PermissionDialog(
+            onConfirmation = { },
+            dialogTitle = "Test" ,
+            dialogText = "Test" ,
+            icon = Icons.Filled.LocationOn
+        )
+
+    }
+
 
 
     Column(
