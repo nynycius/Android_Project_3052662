@@ -13,7 +13,7 @@ class InitializeDatabase {
         val database = Room.databaseBuilder(
             context.applicationContext,
             BuildDatabase::class.java,
-            "builds-database"
+            "builds_database.db"
         ).build()
 
         val dao = database.dao
