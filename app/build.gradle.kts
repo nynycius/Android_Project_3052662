@@ -3,12 +3,12 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 
-    // maps plug in
+    // x
     id ("kotlin-kapt")
     id ("com.google.dagger.hilt.android")
 
     // Mangodb Realm plug ins
-    id("io.realm.kotlin")
+    //id("io.realm.kotlin")  // not in use
 
 }
 
@@ -61,10 +61,17 @@ android {
 
 dependencies {
 
+    // Room dependency
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+
+
+    // Not in use
     // Mangodb Realm implementation
-    implementation ("io.realm.kotlin:library-base:1.11.0")
-    implementation ("io.realm.kotlin:library-sync:1.11.0")// If using Device Sync
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
+//    implementation ("io.realm.kotlin:library-base:1.11.0")
+//    implementation ("io.realm.kotlin:library-sync:1.11.0")// If using Device Sync
+//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
 
 
 
@@ -125,4 +132,3 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 }
 
-// Mangodb Realm plug
