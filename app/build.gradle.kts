@@ -62,10 +62,12 @@ android {
 dependencies {
 
     // Mangodb Realm implementation
-    implementation ("io.realm.kotlin:library-base:1.11.0")
-    implementation ("io.realm.kotlin:library-sync:1.11.0")// If using Device Sync
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
+//    implementation ("io.realm.kotlin:library-base:1.11.0")
+//    implementation ("io.realm.kotlin:library-sync:1.11.0")// If using Device Sync
+//    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0") // If using coroutines with the SDK
 
+    // SQLite
+    implementation ("androidx.sqlite:sqlite-ktx:2.4.0")
 
 
 // add nav dependency from Jetpack M3

@@ -1,5 +1,6 @@
 package com.gdc.androidproject3052662
 
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -51,6 +52,11 @@ import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.coroutines.launch
 
 
+// database variables
+private var data = mutableSetOf("Empty database")
+private lateinit var databaseManager: DatabaseManager
+private lateinit var database: SQLiteDatabase
+
 @OptIn(ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,17 +69,47 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-
                     // Initial call to start application, NavDrawer encapsulate the main layout and transition
                     NavDrawer()
+
 
                     }
 
 
                 }
             }
+            // init database
+            databaseManager = DatabaseManager(this, "build.db", null, 1)
+            database = databaseManager.writableDatabase
         }
+
+
+    override fun onResume() {
+
+        super.onResume()
+
+     }
+
+    override fun onStop() {
+        super.onStop()
+        addData()
+        updateData()
     }
+
+    private fun retrieveData() : String{
+        return ""
+    }
+
+    private fun addData(){
+//        val row
+    }
+
+    private fun updateData(){
+
+    }
+
+}
+
 
 
 
