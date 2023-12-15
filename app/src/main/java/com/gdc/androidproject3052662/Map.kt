@@ -133,7 +133,7 @@ fun MapScreen(navController: NavController) {
     // if distance smaller than 2 meters pop up Dialog
     if(DistanceTo(latLng = testMarker) < 5 ){
 
-        PermissionDialog( onConfirmation = {  requestPermissionLauncher.launchPermissionRequest() },
+        PermissionDialog( onConfirmation = {   },
             dialogTitle = " Test " ,
             dialogText = "Test " ,
             icon = Icons.Filled.LocationOn)
@@ -151,13 +151,13 @@ fun MapScreen(navController: NavController) {
     ) {
 
         // location debug
-        Text(text = location.toString())
-
-
-        Text(text = getLocation(context).toString())
-
-        // print distance
-        Text(text = "Distance between points " + DistanceTo(latLng = testMarker).toString())
+//        Text(text = location.toString())
+//
+//
+//        Text(text = getLocation(context).toString())
+//
+//        // print distance
+//        Text(text = "Distance between points " + DistanceTo(latLng = testMarker).toString())
 
 
         Spacer(modifier = Modifier.height(16.dp))
